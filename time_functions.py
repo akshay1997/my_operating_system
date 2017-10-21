@@ -20,4 +20,4 @@ def get_real_time(t):
 	second=str(t[5])
 	if len(second)==1:
 		second='0'+second
-	return {'year':t[0],'month':t[1],'day':t[2],'hour':t[3],'minute':t[4],'second':t[5]}
+	return year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second
