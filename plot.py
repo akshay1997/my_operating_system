@@ -1,6 +1,7 @@
 import plotly.plotly as py
 import plotly.figure_factory as ff
 import time_functions
+import plotly.graph_objs as go
 
 def plot_tasks(task_list):  #task_list is a list of dictionaries containing name,start and finish in relative seconds
     now_seconds=time_functions.get_current_sec()
@@ -18,3 +19,16 @@ def plot_tasks(task_list):  #task_list is a list of dictionaries containing name
     fig = py.get_figure('udayakumar97', url)
     py.image.save_as(fig,'simple.png')
 
+def plot_memory(task_list,mapping):
+    data=[]
+    for task in task_list:
+        trace=go.Bar(x=[mapping[task['name']]['name']],y=[task['memory']],name=task['name'])
+        data.append(trace)
+    layout = go.Layout(barmode='stack')
+    fig = go.Figure(data=data, layout=layout)
+    url=py.plot(fig, filename='stacked-bar',world_readable=True, auto_open=False)
+    print(url)
+    url=url[30:]
+    print(url)
+    fig = py.get_figure('udayakumar97', url)
+    py.image.save_as(fig,'bar.png')
