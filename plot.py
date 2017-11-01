@@ -24,6 +24,8 @@ def plot_memory(task_list,mapping):
     for task in task_list:
         trace=go.Bar(x=[mapping[task['name']]['name']],y=[task['memory']],name=task['name'])
         data.append(trace)
+    if len(data)==0:
+        return False
     layout = go.Layout(barmode='stack')
     fig = go.Figure(data=data, layout=layout)
     url=py.plot(fig, filename='stacked-bar',world_readable=True, auto_open=False)
@@ -32,3 +34,4 @@ def plot_memory(task_list,mapping):
     print(url)
     fig = py.get_figure('udayakumar97', url)
     py.image.save_as(fig,'bar.png')
+    return True
