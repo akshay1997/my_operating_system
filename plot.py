@@ -3,6 +3,8 @@ import plotly.figure_factory as ff
 import time_functions
 import plotly.graph_objs as go
 
+username='udayakumar97'
+
 def plot_tasks(task_list):  #task_list is a list of dictionaries containing name,start and finish in relative seconds
     now_seconds=time_functions.get_current_sec()
     df=[]
@@ -14,9 +16,9 @@ def plot_tasks(task_list):  #task_list is a list of dictionaries containing name
     print(df)
     fig = ff.create_gantt(df,group_tasks=True)
     url=py.plot(fig, filename='gantt-simple-gantt-chart', world_readable=True, auto_open=False)  
-    url=url[30:]
+    url=url[-1:]
     print(url)
-    fig = py.get_figure('udayakumar97', url)
+    fig = py.get_figure(username, url)
     py.image.save_as(fig,'simple.png')
 
 def plot_memory(task_list,mapping):
@@ -30,8 +32,8 @@ def plot_memory(task_list,mapping):
     fig = go.Figure(data=data, layout=layout)
     url=py.plot(fig, filename='stacked-bar',world_readable=True, auto_open=False)
     print(url)
-    url=url[30:]
+    url=url[-1:]
     print(url)
-    fig = py.get_figure('udayakumar97', url)
+    fig = py.get_figure(username, url)
     py.image.save_as(fig,'bar.png')
     return True
