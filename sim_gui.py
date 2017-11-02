@@ -107,30 +107,7 @@ def task_details_memory_press(btn):
         page_memory=app.getEntry('page_memory'+str(i)+"_entry")
         page_details.append(dict(name='Page '+str(i),memory=page_memory))
     print(page_details)
-    curr_row=app.getRow()
-    app.addLabel("mem_algo_label","Choose memory algorithm:",curr_row,0)
-    app.addRadioButton("memory_algo","First Fit",curr_row,1)
-    app.addRadioButton("memory_algo","Best Fit",curr_row,2)
-    app.addRadioButton("memory_algo","Worst Fit",curr_row,3)
-    app.addNamedButton('Enter','choice_fit',memory_choice_press,curr_row,4)
-    #app.setRadioButtonChangeFunction("memory_algo", memory_choice_press)
-
-    
-
-    '''
-    scheduler.simple_scheduler(task_details)
-    gannt_window_name=id_generator()
-    gannt_image_name=id_generator()
-    app.startSubWindow(gannt_window_name)
-    app.addImage(gannt_image_name, "simple.png")
-    app.stopSubWindow()
-    app.showSubWindow(gannt_window_name)
-    '''
-def memory_choice_press(btn):
     choice=app.getRadioButton('memory_algo')
-    global task_details
-    global page_details
-    print(choice)
     if choice == 'First Fit':
         print('Doing first fit')
         task_list,mapping=ff(task_details,page_details)
@@ -151,23 +128,76 @@ def memory_choice_press(btn):
         app.stopSubWindow()
         app.showSubWindow(chart_window_name)
     
+    
+    
+    #app.setRadioButtonChangeFunction("memory_algo", memory_choice_press)
+
+    
+
+    '''
+    scheduler.simple_scheduler(task_details)
+    gannt_window_name=id_generator()
+    gannt_image_name=id_generator()
+    app.startSubWindow(gannt_window_name)
+    app.addImage(gannt_image_name, "simple.png")
+    app.stopSubWindow()
+    app.showSubWindow(gannt_window_name)
+    '''
 
 def task_details_both_press(btn):
     num_tasks=app.getEntry('num_tasks_entry')
+    global task_details
     task_details=[]
     for i in range(0,int(num_tasks)):
         entry=app.getEntry('entry_time'+str(i)+"_entry")
         burst=app.getEntry('burst_time'+str(i)+"_entry")
-        #priority=app.getEntry('priority'+str(i)+"_entry")
         memory=app.getEntry('memory'+str(i)+"_entry")
         task_details.append(dict(name='Task '+str(i),memory=memory,entry=entry,burst=burst))
     print(task_details)
     num_pages=app.getEntry('num_pages_entry')
+    global page_details
     page_details=[]
     for i in range(0,int(num_pages)):
         page_memory=app.getEntry('page_memory'+str(i)+"_entry")
         page_details.append(dict(name='Page '+str(i),memory=page_memory))
     print(page_details)
+    choice=app.getRadioButton('memory_algo')
+    if choice == 'First Fit':
+        print('Doing first fit')
+        task_list,mapping=ff(task_details,page_details)
+    elif choice =='Best Fit':
+        print('Doing best fit')
+        task_list,mapping=bf(task_details,page_details)
+    else:
+        print('Doing worst fit')
+        task_list,mapping=wf(task_details,page_details)
+    print(task_list)
+    print (mapping)
+    op=plot_memory(task_list,mapping)
+    if op==True:
+        chart_window_name=id_generator()
+        chart_image_name=id_generator()
+        app.startSubWindow(chart_window_name)
+        app.addImage(chart_image_name, "bar.png")
+        app.stopSubWindow()
+        app.showSubWindow(chart_window_name)
+
+        scheduler_algo=app.getRadioButton('scheduler_algo')
+        if scheduler_algo=='FCFS':
+            fcfs(task_list)
+        elif scheduler_algo=='SRTF':
+            srtf(task_list)
+        else:
+            sjf(task_list)
+        gannt_window_name=id_generator()
+        gannt_image_name=id_generator()
+        app.startSubWindow(gannt_window_name)
+        app.addImage(gannt_image_name, "simple.png")
+        app.stopSubWindow()
+        app.showSubWindow(gannt_window_name)
+    else:
+        print('Not enough memory to execute any task')
+    
     '''
     scheduler.simple_scheduler(task_details)
     gannt_window_name=id_generator()
@@ -216,13 +246,21 @@ def generate_task_details_column(num_tasks,event):
         app.addRadioButton("scheduler_algo", "SRTF",curr_row+num_tasks,3)
         app.addNamedButton('Enter','task_details_scheduler_btn',task_details_scheduler_press,curr_row+num_tasks,4)
     elif event==2:
+        app.addLabel("mem_algo_label","Choose memory algorithm:",curr_row,0)
+        app.addRadioButton("memory_algo","First Fit",curr_row,1)
+        app.addRadioButton("memory_algo","Best Fit",curr_row,2)
+        app.addRadioButton("memory_algo","Worst Fit",curr_row,3)
         app.addNamedButton('Enter','task_details_memory_btn',task_details_memory_press,curr_row+num_tasks,0)
     else:
         app.addLabel("choice_scheduler_label","Choose Scheduling Algorithm:",curr_row+num_tasks,0)
         app.addRadioButton("scheduler_algo", "FCFS",curr_row+num_tasks,1)
         app.addRadioButton("scheduler_algo", "SJF",curr_row+num_tasks,2)
         app.addRadioButton("scheduler_algo", "SRTF",curr_row+num_tasks,3)
-        app.addNamedButton('Enter','task_details_both_btn',task_details_both_press,curr_row+num_tasks,4)
+        app.addLabel("mem_algo_label","Choose memory algorithm:",curr_row+num_tasks+1,0)
+        app.addRadioButton("memory_algo","First Fit",curr_row+num_tasks+1,1)
+        app.addRadioButton("memory_algo","Best Fit",curr_row+num_tasks+1,2)
+        app.addRadioButton("memory_algo","Worst Fit",curr_row+num_tasks+1,3)
+        app.addNamedButton('Enter','task_details_both_btn',task_details_both_press,curr_row+num_tasks+1,4)
 
 
 def begin():
