@@ -20,7 +20,7 @@ def fcfs(task_list):
 	print(final_task_list)
 	plot.plot_tasks(final_task_list)
 
-def srtf(task_list): #Preemtive
+def srtf(task_list): #Preemptive
 	final_task_list=[]
 	task_list_temp=deepcopy(task_list)
 	task_list_temp = sorted(task_list_temp, key=itemgetter('entry'))
@@ -51,7 +51,7 @@ def srtf(task_list): #Preemtive
 	plot.plot_tasks(final_task_list)
 
 
-def sjf(task_list): #Non-preemtive
+def sjf(task_list): #Non-preemptive
 	final_task_list=[]
 	task_list_temp=deepcopy(task_list)
 	task_list_temp = sorted(task_list_temp, key=itemgetter('entry'))
